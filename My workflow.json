@@ -31,14 +31,14 @@
           "value": "YOUR_GOOGLE_SHEETS_DOCUMENT_ID",
           "mode": "list",
           "cachedResultName": "n8n-proj1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14lUWhB75YzFYP2pGv-cemCmnHDXHM75ZYInRjofioaw/edit?usp=drivesdk"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEETS_DOCUMENT_ID/edit?usp=drivesdk"
         },
         "sheetName": {
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
           "cachedResultName": "Sheet1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14lUWhB75YzFYP2pGv-cemCmnHDXHM75ZYInRjofioaw/edit#gid=0"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEETS_DOCUMENT_ID/edit#gid=0"
         },
         "options": {
           "outputFormatting": {
@@ -59,7 +59,7 @@
       "name": "Get row(s) in sheet",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "8CI1KpnolLN7Hndt",
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
           "name": "Google Sheets account"
         }
       }
@@ -283,14 +283,14 @@
           "value": "YOUR_GOOGLE_SHEETS_DOCUMENT_ID",
           "mode": "list",
           "cachedResultName": "n8n-proj1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14lUWhB75YzFYP2pGv-cemCmnHDXHM75ZYInRjofioaw/edit?usp=drivesdk"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEETS_DOCUMENT_ID/edit?usp=drivesdk"
         },
         "sheetName": {
           "__rl": true,
           "value": "gid=0",
           "mode": "list",
           "cachedResultName": "Sheet1",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14lUWhB75YzFYP2pGv-cemCmnHDXHM75ZYInRjofioaw/edit#gid=0"
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEETS_DOCUMENT_ID/edit#gid=0"
         },
         "columns": {
           "mappingMode": "defineBelow",
@@ -375,7 +375,7 @@
       "name": "Append or update row in sheet",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "8CI1KpnolLN7Hndt",
+          "id": "YOUR_GOOGLE_SHEETS_CREDENTIAL_ID",
           "name": "Google Sheets account"
         }
       }
@@ -497,8 +497,8 @@
   "versionId": "a45dd02f-7b27-420b-9308-6645feb3fa4c",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "900cfe53cad3769fd058670d9c075977821a39609b8b66db8ab747a7fdeb070e"
+    "instanceId": "YOUR_N8N_INSTANCE_ID"
   },
-  "id": "evRul1DHSsE7tD9r",
+  "id": "YOUR_WORKFLOW_ID",
   "tags": []
 }
