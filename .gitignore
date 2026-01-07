@@ -1,0 +1,16 @@
+# n8n sensitive data
+database.sqlite
+*.sqlite
+*.db
+
+# Logs
+*.log
+crash.journal
+
+# Local settings
+.claude/settings.local.json
+config
+
+# Environment variables
+.env
+.env.local
