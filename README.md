@@ -33,6 +33,8 @@ This automation workflow performs the following steps:
 
 ## Setup
 
+> **Important Note**: The workflow file contains placeholders (`YOUR_SLACK_WEBHOOK_URL`, `YOUR_DISCORD_WEBHOOK_URL`, `YOUR_GOOGLE_SHEETS_DOCUMENT_ID`) instead of actual credentials for security purposes. You'll need to configure these values in your local n8n instance when you import the workflow.
+
 1. Import the workflow into your n8n instance
 2. Configure credentials for:
    - Google Sheets
