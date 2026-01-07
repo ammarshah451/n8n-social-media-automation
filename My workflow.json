@@ -1,0 +1,504 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "3daf95f7-8cb2-4428-818d-7085ad6cb485",
+      "name": "Schedule Trigger",
+      "alwaysOutputData": false,
+      "executeOnce": false,
+      "retryOnFail": false,
+      "notesInFlow": false
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEETS_DOCUMENT_ID",
+          "mode": "list",
+          "cachedResultName": "n8n-proj1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14lUWhB75YzFYP2pGv-cemCmnHDXHM75ZYInRjofioaw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14lUWhB75YzFYP2pGv-cemCmnHDXHM75ZYInRjofioaw/edit#gid=0"
+        },
+        "options": {
+          "outputFormatting": {
+            "values": {
+              "general": "FORMATTED_VALUE",
+              "date": "FORMATTED_STRING"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        208,
+        0
+      ],
+      "id": "f0ff17a8-ed93-43c0-a6ee-7b33a572b70f",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "8CI1KpnolLN7Hndt",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c42601bc-db3c-483c-9ee5-9dcfebb645d9",
+              "leftValue": "={{ $json.Status }}",
+              "rightValue": "=Pending",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "f67a142c-cf3b-42de-8000-02537bfd2e12",
+              "leftValue": "={{new Date($json[\"Time\"]).getTime()}}",
+              "rightValue": "={{ new Date().getTime()}}",
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "cdb3484e-59b1-45b9-805d-a8e53136971f",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "6ac9433a-550b-4014-a0d8-c21474f50abe"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "84e1ca44-f2e7-4366-a434-dbe6b59d72f3",
+                    "leftValue": "={{ $json.Platform }}",
+                    "rightValue": "Twitter",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "31df9281-f1cf-4330-b442-8425acfc15b8",
+                    "leftValue": "={{ $json.Platform }}",
+                    "rightValue": "linkedin",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        624,
+        -96
+      ],
+      "id": "90887919-9f61-4c66-8e28-44f75ed4418a",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "YOUR_SLACK_WEBHOOK_URL",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"✅ *Ready to post on LinkedIn!*\\n\\n📝 *Content:*\\n{{ $json['Text'] }}\\n\\n⏰ *Scheduled:* {{ $json['Time'] }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        832,
+        -192
+      ],
+      "id": "3d9c20db-b092-4794-ad2b-0839e23aabef",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "YOUR_DISCORD_WEBHOOK_URL",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"content\": \"{{ $('Get row(s) in sheet').item.json.Text }}\",\n  \"username\": \"Social Media Bot\",\n  \"embeds\": [{\n    \"color\": 3447003,\n    \"fields\": [\n      {\n        \"name\": \"Platform\",\n        \"value\": \"{{ $('Get row(s) in sheet').item.json.Platform }}\",\n        \"inline\": true\n      },\n      {\n        \"name\": \"Scheduled Time\",\n        \"value\": \"{{ $('Get row(s) in sheet').item.json.Time }}\",\n        \"inline\": true\n      },\n      {\n        \"name\": \"Status\",\n        \"value\": \"{{ $('Get row(s) in sheet').item.json.Status }}\",\n        \"inline\": true\n      }\n    ],\n    \"timestamp\": \"{{ $now.toISO() }}\"\n  }]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1040,
+        -192
+      ],
+      "id": "8ae8c266-9860-4f9c-a253-d737830127ee",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5e14c7b2-5307-4ffb-a70c-d38ab85339ab",
+              "name": "row_number",
+              "value": "={{ $('Get row(s) in sheet').item.json.row_number }}",
+              "type": "number"
+            },
+            {
+              "id": "242dc732-a0e6-427f-bb46-b9b5dc6ba16e",
+              "name": "Text",
+              "value": "={{ $('Get row(s) in sheet').item.json.Text }}",
+              "type": "string"
+            },
+            {
+              "id": "9af46f8f-a708-447c-b4fd-52ef27f37489",
+              "name": "Status",
+              "value": "={{ $('Get row(s) in sheet').item.json.Status }}",
+              "type": "string"
+            },
+            {
+              "id": "f04b5d30-3dde-4ff8-944f-6cf510a91782",
+              "name": "Post ID",
+              "value": "={{ $('Get row(s) in sheet').item.json['Post ID'] }}",
+              "type": "string"
+            },
+            {
+              "id": "cf74ca1b-00bc-4254-8047-c17fb6150afe",
+              "name": "Posted At",
+              "value": "={{ $('Get row(s) in sheet').item.json['Posted At'] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1248,
+        -208
+      ],
+      "id": "414b6871-e495-4d9d-aac9-6faa4007d69c",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "YOUR_GOOGLE_SHEETS_DOCUMENT_ID",
+          "mode": "list",
+          "cachedResultName": "n8n-proj1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14lUWhB75YzFYP2pGv-cemCmnHDXHM75ZYInRjofioaw/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/14lUWhB75YzFYP2pGv-cemCmnHDXHM75ZYInRjofioaw/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Text": "={{ $json.Text }}",
+            "Status": "=Posted",
+            "Post ID": "={{ $now.toMillis() }}",
+            "Posted At": "={{ $now.toFormat('yyyy-MM-dd HH:mm:ss') }}"
+          },
+          "matchingColumns": [
+            "Text"
+          ],
+          "schema": [
+            {
+              "id": "Text",
+              "displayName": "Text",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Platform",
+              "displayName": "Platform",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Post ID",
+              "displayName": "Post ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Posted At",
+              "displayName": "Posted At",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1456,
+        -208
+      ],
+      "id": "65e2570b-66fb-4f1c-8117-2e005dfc6891",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "8CI1KpnolLN7Hndt",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "YOUR_SLACK_WEBHOOK_URL",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\" : \"Successfully posted to discord with text:{{ $json.Text }} with post id : {{ $json['Post ID'] }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1664,
+        -208
+      ],
+      "id": "813c9887-34cf-4f85-a7eb-5ce165fdecad",
+      "name": "HTTP Request2"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a45dd02f-7b27-420b-9308-6645feb3fa4c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "900cfe53cad3769fd058670d9c075977821a39609b8b66db8ab747a7fdeb070e"
+  },
+  "id": "evRul1DHSsE7tD9r",
+  "tags": []
+}
